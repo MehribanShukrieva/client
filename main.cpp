@@ -43,9 +43,9 @@ int main() {
 	sockaddr_in serveraddr;
 	serveraddr.sin_family = AF_INET;
 	serveraddr.sin_port = htons(port);
-	inet_pton(s, serveraddress.c_str(), &(serveraddr.sin_addr));
+	inet_pton(AF_INET, serveraddress.c_str(), &(serveraddr.sin_addr));
 
-	if (connect(s, reinterpret_cast<sockaddr*>(serveraddr), sizeof(serveraddr)) == SOCKET_ERROR) {
+	if (connect(s, reinterpret_cast<sockaddr*>(&serveraddr), sizeof(serveraddr)) == SOCKET_ERROR) {
 		cout << "not able to connect to server" << endl;
 		closesocket(s);
 		WSACleanup();
@@ -54,7 +54,16 @@ int main() {
 
 	cout << "successfully connected to server" << endl;
 	
-	
+	//send/recv
+	string message = "hello there!";
+	int bytesent;
+	bytesent = send(s, message.c_str(), message.length(), 0);
+	if (bytesent == SOCKET_ERROR) {
+		cout << "send failed" << endl;
+	}
+	closesocket(s);
+
+
 	
 
 
